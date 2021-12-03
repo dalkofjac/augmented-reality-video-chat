@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Augmented Reality App</string>
+    <string name="act_main_title">Augmented Reality App</string>
+    <string name="act_main_room_name">Room name (e.g. 12345)</string>
+    <string name="act_main_btn_start">Start</string>
+    <string name="act_main_subtitle">Video chat</string>
+    <string name="error_room_name_length">Video chat room has to have at least two characters.</string>
+    <string name="session_call_remote_client_left">Remote client has left the call.</string>
+</resources>
