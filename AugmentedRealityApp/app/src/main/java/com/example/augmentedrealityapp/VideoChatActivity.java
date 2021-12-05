@@ -346,6 +346,7 @@ public class VideoChatActivity extends AppCompatActivity {
 
         stopPeerConnection();
         mIsInitiator = true;
+        mRemoteVideoView.clearImage();
         runOnUiThread(() -> Toast.makeText(this, getString(R.string.session_call_remote_client_left), Toast.LENGTH_LONG).show());
     }
 

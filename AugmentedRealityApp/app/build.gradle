@@ -17,25 +17,25 @@ android {
     }
 
     buildTypes {
-        release {
-            buildConfigField('String', 'SIGNALING_SERVER_URL', '"http://localhost:5000/hubs"')
-            buildConfigField('String', 'STUN_SERVER_1', '"stun:stun.1.google.com:19302"')
-            buildConfigField('String', 'STUN_SERVER_2', '"stun:stun1.l.google.com:19302"')
-            buildConfigField('String', 'TURN_SERVER_URL', '""')
-            buildConfigField('String', 'TURN_SERVER_USERNAME', '""')
-            buildConfigField('String', 'TURN_SERVER_CREDENTIAL', '""')
-
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            minifyEnabled false
-        }
         debug {
             // Use ngrok (@https://ngrok.com/) to work with localhost on Android
             buildConfigField('String', 'SIGNALING_SERVER_URL', '"https://91e0-89-164-130-121.ngrok.io/hubs"')
             buildConfigField('String', 'STUN_SERVER_1', '"stun:stun.1.google.com:19302"')
-            buildConfigField('String', 'STUN_SERVER_2', '"stun:stun1.l.google.com:19302"')
-            buildConfigField('String', 'TURN_SERVER_URL', '""')
+            buildConfigField('String', 'STUN_SERVER_2', '"stun:eu-turn2.xirsys.com"')
+            buildConfigField('String', 'TURN_SERVER_URL',  '""')
             buildConfigField('String', 'TURN_SERVER_USERNAME', '""')
-            buildConfigField('String', 'TURN_SERVER_CREDENTIAL', '""')
+            buildConfigField('String', 'TURN_SERVER_CREDENTIAL',  '""')
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+        }
+        release {
+            buildConfigField('String', 'SIGNALING_SERVER_URL', '"https://webrtc-signaling-server.azurewebsites.net/hubs"')
+            buildConfigField('String', 'STUN_SERVER_1', '"stun:stun.1.google.com:19302"')
+            buildConfigField('String', 'STUN_SERVER_2', '"stun:eu-turn2.xirsys.com"')
+            buildConfigField('String', 'TURN_SERVER_URL',  String.format('"%s"', getTurnUrl(project)))
+            buildConfigField('String', 'TURN_SERVER_USERNAME', String.format('"%s"', getTurnUsername(project)))
+            buildConfigField('String', 'TURN_SERVER_CREDENTIAL',  String.format('"%s"', getTurnCredential(project)))
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled false
@@ -62,4 +62,25 @@ dependencies {
     implementation 'org.webrtc:google-webrtc:1.0.30039'
     // SignalR
     implementation 'com.microsoft.signalr:signalr:3.1.20'
+}
+
+// this method reads 'turn.url=' variable in local.properties
+def static getTurnUrl(project) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+    return properties.getProperty("turn.url", "");
+}
+
+// this method reads 'turn.username=' variable in local.properties
+def static getTurnUsername(project) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+    return properties.getProperty("turn.username", "");
+}
+
+// this method reads 'turn.credential=' variable in local.properties
+def static getTurnCredential(project) {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+    return properties.getProperty("turn.credential", "");
 }
